@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: prices-service
@@ -8,13 +11,14 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: false
+    open-in-view: false
     defer-datasource-initialization: true
   sql:
     init:
-      mode: always
+      mode: embedded
   h2:
     console:
-      enabled: true
+      enabled: false
 
 springdoc:
   api-docs:
@@ -26,8 +30,6 @@ springdoc:
 logging:
   level:
     root: INFO
-    '[com.bcnc.pricing.infrastructure.adapter.in.rest]': INFO
-    '[com.bcnc.pricing.application.service]': INFO
     '[com.bcnc.pricing.infrastructure.adapter.out.persistence]': DEBUG
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{requestId}] %logger{36} - %msg%n"
