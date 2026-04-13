@@ -55,8 +55,8 @@ class MdcRequestFilterTest {
         filter.doFilterInternal(request, response, filterChain);
 
         String responseHeader = response.getHeader("X-Request-ID");
+        assertThat(responseHeader).isNotNull();
         assertThat(responseHeader).isNotBlank();
-        assertThat(responseHeader.trim()).isNotEqualTo("");
     }
 
     @Test

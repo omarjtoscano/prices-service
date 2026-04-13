@@ -40,8 +40,10 @@ class GlobalExceptionHandlerTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getStatusCode()).isEqualTo(500);
-        assertThat(response.getBody().getMessage()).isEqualTo("Internal server error");
-        assertThat(response.getBody().getTimestamp()).isNotNull();
+
+        ErrorResponse body = response.getBody();
+        assertThat(body.getStatusCode()).isEqualTo(500);
+        assertThat(body.getMessage()).isEqualTo("Internal server error");
+        assertThat(body.getTimestamp()).isNotNull();
     }
 }
