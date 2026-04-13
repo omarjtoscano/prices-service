@@ -181,5 +181,8 @@ class PriceJpaRepositoryTest {
                 BRAND_ID, PRODUCT_ID, LocalDateTime.of(2020, 6, 14, 12, 0));
 
         assertThat(result).isPresent();
+        assertThat(result.get().getPriority()).isEqualTo(1);
+        assertThat(result.get().getPriceList()).isIn(1, 2);
+        assertThat(result.get().getPrice()).isIn(new BigDecimal("35.50"), new BigDecimal("25.45"));
     }
 }
