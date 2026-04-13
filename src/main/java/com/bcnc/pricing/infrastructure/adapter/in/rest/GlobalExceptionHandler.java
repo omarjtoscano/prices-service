@@ -48,6 +48,7 @@ public class GlobalExceptionHandler {
                     return String.format("Invalid value for parameter '%s': %s", field, v.getMessage());
                 })
                 .collect(Collectors.joining("; "));
+        log.warn("Constraint violation: {}", message);
         return buildResponse(HttpStatus.BAD_REQUEST, message);
     }
 
@@ -59,7 +60,7 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, String message) {
         ErrorResponse error = ErrorResponse.builder()
-                .status(status.value())
+                .statusCode(status.value())
                 .message(message)
                 .timestamp(LocalDateTime.now())
                 .build();

@@ -1,8 +1,7 @@
 package com.bcnc.pricing.application.service;
 
-import java.util.Optional;
-
 import com.bcnc.pricing.domain.model.Price;
+import com.bcnc.pricing.domain.model.PriceNotFoundException;
 import com.bcnc.pricing.domain.model.PriceQuery;
 import com.bcnc.pricing.domain.port.in.GetApplicablePriceUseCase;
 import com.bcnc.pricing.domain.port.out.PriceRepositoryPort;
@@ -18,23 +17,12 @@ public class PriceService implements GetApplicablePriceUseCase {
     }
 
     @Override
-    public Optional<Price> findApplicablePrice(PriceQuery query) {
-        log.info("Executing use case findApplicablePrice: productId={}, brandId={}, applicationDate={}",
+    public Price findApplicablePrice(PriceQuery query) {
+        log.debug("Executing use case findApplicablePrice: productId={}, brandId={}, applicationDate={}",
                 query.getProductId(), query.getBrandId(), query.getApplicationDate());
 
-        Optional<Price> result = priceRepositoryPort.findApplicablePrice(
-                query.getBrandId(),
-                query.getProductId(),
-                query.getApplicationDate());
-
-        if (result.isEmpty()) {
-            log.warn("No applicable price found: productId={}, brandId={}, applicationDate={}",
-                    query.getProductId(), query.getBrandId(), query.getApplicationDate());
-        } else {
-            log.info("Price found for productId={}, brandId={}, priceList={}",
-                    query.getProductId(), query.getBrandId(), result.get().getPriceList());
-        }
-
-        return result;
+        return priceRepositoryPort.findApplicablePrice(query)
+                .orElseThrow(() -> new PriceNotFoundException(
+                        query.getBrandId(), query.getProductId(), query.getApplicationDate()));
     }
 }

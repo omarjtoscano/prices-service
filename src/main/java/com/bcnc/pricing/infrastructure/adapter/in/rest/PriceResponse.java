@@ -15,6 +15,6 @@ public class PriceResponse {
     private final Integer priceList;
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
-    private final BigDecimal price;
-    private final String curr; 
+    private final BigDecimal amount;
+    private final String currency; 
 }

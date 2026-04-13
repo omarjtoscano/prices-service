@@ -15,8 +15,8 @@ public class PriceEntityMapper {
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
                 .priority(entity.getPriority())
-                .amount(entity.getPrice())
-                .currency(entity.getCurr())
+                .amount(entity.getAmount())
+                .currency(entity.getCurrency())
                 .build();
     }
 }

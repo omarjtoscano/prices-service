@@ -1,11 +1,16 @@
 package com.bcnc.pricing.domain.port.out;
 
-import com.bcnc.pricing.domain.model.Price;
-
-import java.time.LocalDateTime;
 import java.util.Optional;
 
+import com.bcnc.pricing.domain.model.Price;
+import com.bcnc.pricing.domain.model.PriceQuery;
+
+/**
+ * Output port for price persistence queries.
+ * Finds the highest-priority price matching the brand, product, and date criteria
+ * encapsulated in a {@link PriceQuery}.
+ */
 public interface PriceRepositoryPort {
 
-    Optional<Price> findApplicablePrice(Long brandId, Long productId, LocalDateTime applicationDate);
+    Optional<Price> findApplicablePrice(PriceQuery query);
 }

@@ -1,5 +1,6 @@
 package com.bcnc.pricing.infrastructure.adapter.in.rest;
 
+import static org.hamcrest.Matchers.containsString;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,7 +26,7 @@ class PriceControllerIntegrationTest {
     private static final Long BRAND_ID = 1L;
 
     @Test
-    @DisplayName("Test 1: 14/06 10:00 → priceList=1, price=35.50")
+    @DisplayName("Test 1: 14/06 10:00 → priceList=1, amount=35.50")
     void shouldReturnPriceList1_whenRequestAt10OnDay14() throws Exception {
         mockMvc.perform(get(ENDPOINT)
                         .param("applicationDate", "2020-06-14T10:00:00")
@@ -38,11 +37,11 @@ class PriceControllerIntegrationTest {
                 .andExpect(jsonPath("$.productId").value(35455))
                 .andExpect(jsonPath("$.brandId").value(1))
                 .andExpect(jsonPath("$.priceList").value(1))
-                .andExpect(jsonPath("$.price").value(35.50));
+                .andExpect(jsonPath("$.amount").value(35.50));
     }
 
     @Test
-    @DisplayName("Test 2: 14/06 16:00 → priceList=2, price=25.45")
+    @DisplayName("Test 2: 14/06 16:00 → priceList=2, amount=25.45")
     void shouldReturnPriceList2_whenRequestAt16OnDay14() throws Exception {
         mockMvc.perform(get(ENDPOINT)
                         .param("applicationDate", "2020-06-14T16:00:00")
@@ -53,11 +52,11 @@ class PriceControllerIntegrationTest {
                 .andExpect(jsonPath("$.productId").value(35455))
                 .andExpect(jsonPath("$.brandId").value(1))
                 .andExpect(jsonPath("$.priceList").value(2))
-                .andExpect(jsonPath("$.price").value(25.45));
+                .andExpect(jsonPath("$.amount").value(25.45));
     }
 
     @Test
-    @DisplayName("Test 3: 14/06 21:00 → priceList=1, price=35.50")
+    @DisplayName("Test 3: 14/06 21:00 → priceList=1, amount=35.50")
     void shouldReturnPriceList1_whenRequestAt21OnDay14() throws Exception {
         mockMvc.perform(get(ENDPOINT)
                         .param("applicationDate", "2020-06-14T21:00:00")
@@ -68,11 +67,11 @@ class PriceControllerIntegrationTest {
                 .andExpect(jsonPath("$.productId").value(35455))
                 .andExpect(jsonPath("$.brandId").value(1))
                 .andExpect(jsonPath("$.priceList").value(1))
-                .andExpect(jsonPath("$.price").value(35.50));
+                .andExpect(jsonPath("$.amount").value(35.50));
     }
 
     @Test
-    @DisplayName("Test 4: 15/06 10:00 → priceList=3, price=30.50")
+    @DisplayName("Test 4: 15/06 10:00 → priceList=3, amount=30.50")
     void shouldReturnPriceList3_whenRequestAt10OnDay15() throws Exception {
         mockMvc.perform(get(ENDPOINT)
                         .param("applicationDate", "2020-06-15T10:00:00")
@@ -83,11 +82,11 @@ class PriceControllerIntegrationTest {
                 .andExpect(jsonPath("$.productId").value(35455))
                 .andExpect(jsonPath("$.brandId").value(1))
                 .andExpect(jsonPath("$.priceList").value(3))
-                .andExpect(jsonPath("$.price").value(30.50));
+                .andExpect(jsonPath("$.amount").value(30.50));
     }
 
     @Test
-    @DisplayName("Test 5: 16/06 21:00 → priceList=4, price=38.95")
+    @DisplayName("Test 5: 16/06 21:00 → priceList=4, amount=38.95")
     void shouldReturnPriceList4_whenRequestAt21OnDay16() throws Exception {
         mockMvc.perform(get(ENDPOINT)
                         .param("applicationDate", "2020-06-16T21:00:00")
@@ -98,7 +97,7 @@ class PriceControllerIntegrationTest {
                 .andExpect(jsonPath("$.productId").value(35455))
                 .andExpect(jsonPath("$.brandId").value(1))
                 .andExpect(jsonPath("$.priceList").value(4))
-                .andExpect(jsonPath("$.price").value(38.95));
+                .andExpect(jsonPath("$.amount").value(38.95));
     }
 
     // --- Negative scenarios ---
@@ -112,7 +111,7 @@ class PriceControllerIntegrationTest {
                         .param("brandId", BRAND_ID.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.statusCode").value(404))
                 .andExpect(jsonPath("$.message").value(containsString("No applicable price found")))
                 .andExpect(jsonPath("$.timestamp").exists());
     }
@@ -125,7 +124,7 @@ class PriceControllerIntegrationTest {
                         .param("brandId", BRAND_ID.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.statusCode").value(400))
                 .andExpect(jsonPath("$.message").value("Missing required parameter: 'applicationDate'"))
                 .andExpect(jsonPath("$.timestamp").exists());
     }
@@ -138,7 +137,7 @@ class PriceControllerIntegrationTest {
                         .param("brandId", BRAND_ID.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.statusCode").value(400))
                 .andExpect(jsonPath("$.message").value("Missing required parameter: 'productId'"))
                 .andExpect(jsonPath("$.timestamp").exists());
     }
@@ -152,7 +151,7 @@ class PriceControllerIntegrationTest {
                         .param("brandId", BRAND_ID.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.statusCode").value(400))
                 .andExpect(jsonPath("$.message").value(containsString("Invalid value for parameter 'productId'")))
                 .andExpect(jsonPath("$.message").value(containsString("abc")))
                 .andExpect(jsonPath("$.timestamp").exists());
@@ -167,7 +166,7 @@ class PriceControllerIntegrationTest {
                         .param("brandId", BRAND_ID.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.statusCode").value(400))
                 .andExpect(jsonPath("$.message").value(containsString("Invalid value for parameter 'applicationDate'")))
                 .andExpect(jsonPath("$.timestamp").exists());
     }
@@ -181,7 +180,7 @@ class PriceControllerIntegrationTest {
                         .param("brandId", BRAND_ID.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.statusCode").value(400))
                 .andExpect(jsonPath("$.message").value(containsString("productId")))
                 .andExpect(jsonPath("$.timestamp").exists());
     }
@@ -195,7 +194,7 @@ class PriceControllerIntegrationTest {
                         .param("brandId", BRAND_ID.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.statusCode").value(400))
                 .andExpect(jsonPath("$.message").value(containsString("productId")))
                 .andExpect(jsonPath("$.timestamp").exists());
     }
@@ -209,7 +208,7 @@ class PriceControllerIntegrationTest {
                         .param("brandId", "0")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.statusCode").value(400))
                 .andExpect(jsonPath("$.message").value(containsString("brandId")))
                 .andExpect(jsonPath("$.timestamp").exists());
     }
@@ -223,7 +222,7 @@ class PriceControllerIntegrationTest {
                         .param("brandId", "-1")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.statusCode").value(400))
                 .andExpect(jsonPath("$.message").value(containsString("brandId")))
                 .andExpect(jsonPath("$.timestamp").exists());
     }

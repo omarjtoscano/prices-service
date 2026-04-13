@@ -14,8 +14,8 @@ public class PriceResponseMapper {
                 .priceList(price.getPriceList())
                 .startDate(price.getStartDate())
                 .endDate(price.getEndDate())
-                .price(price.getAmount())
-                .curr(price.getCurrency())
+                .amount(price.getAmount())
+                .currency(price.getCurrency())
                 .build();
     }
 }

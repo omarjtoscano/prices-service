@@ -2,8 +2,6 @@ package com.bcnc.pricing.infrastructure.adapter.in.rest;
 
 import java.time.LocalDateTime;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcnc.pricing.domain.model.Price;
-import com.bcnc.pricing.domain.model.PriceNotFoundException;
 import com.bcnc.pricing.domain.model.PriceQuery;
 import com.bcnc.pricing.domain.port.in.GetApplicablePriceUseCase;
 
@@ -23,6 +20,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -60,9 +59,7 @@ public class PriceController {
         log.info("Incoming price request: productId={}, brandId={}, applicationDate={}", productId, brandId, applicationDate);
 
         PriceQuery query = new PriceQuery(applicationDate, productId, brandId);
-
-        Price price = getApplicablePriceUseCase.findApplicablePrice(query)
-                .orElseThrow(() -> new PriceNotFoundException(brandId, productId));
+        Price price = getApplicablePriceUseCase.findApplicablePrice(query);
 
         log.info("Price resolved: productId={}, brandId={}, priceList={}", productId, brandId, price.getPriceList());
 

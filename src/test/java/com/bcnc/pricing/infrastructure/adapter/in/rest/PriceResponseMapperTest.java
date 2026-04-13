@@ -35,13 +35,13 @@ class PriceResponseMapperTest {
         assertThat(result.getPriceList()).isEqualTo(2);
         assertThat(result.getStartDate()).isEqualTo(start);
         assertThat(result.getEndDate()).isEqualTo(end);
-        assertThat(result.getPrice()).isEqualByComparingTo("25.45");
-        assertThat(result.getCurr()).isEqualTo("EUR");
+        assertThat(result.getAmount()).isEqualByComparingTo("25.45");
+        assertThat(result.getCurrency()).isEqualTo("EUR");
     }
 
     @Test
-    @DisplayName("Should correctly map renamed fields: domain.amount -> response.price, domain.currency -> response.curr")
-    void shouldMapRenamedFields_correctly() {
+    @DisplayName("Should correctly map amount and currency fields")
+    void shouldMapAmountAndCurrencyFields() {
         Price price = Price.builder()
                 .productId(1L)
                 .brandId(1L)
@@ -55,7 +55,7 @@ class PriceResponseMapperTest {
 
         PriceResponse result = PriceResponseMapper.toResponse(price);
 
-        assertThat(result.getPrice()).isEqualByComparingTo("99.99");
-        assertThat(result.getCurr()).isEqualTo("USD");
+        assertThat(result.getAmount()).isEqualByComparingTo("99.99");
+        assertThat(result.getCurrency()).isEqualTo("USD");
     }
 }

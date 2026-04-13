@@ -1,5 +1,8 @@
 package com.bcnc.pricing.infrastructure.adapter.out.persistence;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,9 +12,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "PRICES")
@@ -43,8 +43,8 @@ public class PriceEntity {
     private Integer priority;
 
     @Column(name = "PRICE", nullable = false)
-    private BigDecimal price;
+    private BigDecimal amount;
 
     @Column(name = "CURR", nullable = false, length = 3)
-    private String curr;
+    private String currency;
 }

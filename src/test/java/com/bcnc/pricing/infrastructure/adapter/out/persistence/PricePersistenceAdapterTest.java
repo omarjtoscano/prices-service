@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.bcnc.pricing.domain.model.Price;
+import com.bcnc.pricing.domain.model.PriceQuery;
 
 @ExtendWith(MockitoExtension.class)
 class PricePersistenceAdapterTest {
@@ -28,6 +29,7 @@ class PricePersistenceAdapterTest {
     private static final Long BRAND_ID = 1L;
     private static final Long PRODUCT_ID = 35455L;
     private static final LocalDateTime APPLICATION_DATE = LocalDateTime.of(2020, 6, 14, 10, 0);
+    private static final PriceQuery QUERY = new PriceQuery(APPLICATION_DATE, PRODUCT_ID, BRAND_ID);
 
     @Test
     @DisplayName("Should delegate to JPA repository and map entity to domain model")
@@ -41,7 +43,7 @@ class PricePersistenceAdapterTest {
         when(jpaRepository.findTopByBrandAndProductAndDate(BRAND_ID, PRODUCT_ID, APPLICATION_DATE))
                 .thenReturn(Optional.of(entity));
 
-        Optional<Price> result = adapter.findApplicablePrice(BRAND_ID, PRODUCT_ID, APPLICATION_DATE);
+        Optional<Price> result = adapter.findApplicablePrice(QUERY);
 
         assertThat(result).isPresent();
         assertThat(result.get().getBrandId()).isEqualTo(BRAND_ID);
@@ -58,7 +60,7 @@ class PricePersistenceAdapterTest {
         when(jpaRepository.findTopByBrandAndProductAndDate(BRAND_ID, PRODUCT_ID, APPLICATION_DATE))
                 .thenReturn(Optional.empty());
 
-        Optional<Price> result = adapter.findApplicablePrice(BRAND_ID, PRODUCT_ID, APPLICATION_DATE);
+        Optional<Price> result = adapter.findApplicablePrice(QUERY);
 
         assertThat(result).isEmpty();
         verify(jpaRepository).findTopByBrandAndProductAndDate(BRAND_ID, PRODUCT_ID, APPLICATION_DATE);

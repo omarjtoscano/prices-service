@@ -66,7 +66,7 @@ class PriceJpaRepositoryTest {
         assertThat(result).isPresent();
         assertThat(result.get().getPriority()).isEqualTo(1);
         assertThat(result.get().getPriceList()).isEqualTo(2);
-        assertThat(result.get().getPrice()).isEqualByComparingTo("25.45");
+        assertThat(result.get().getAmount()).isEqualByComparingTo("25.45");
     }
 
     @Test
@@ -85,7 +85,7 @@ class PriceJpaRepositoryTest {
         assertThat(result).isPresent();
         assertThat(result.get().getPriority()).isEqualTo(2);
         assertThat(result.get().getPriceList()).isEqualTo(3);
-        assertThat(result.get().getPrice()).isEqualByComparingTo("20.00");
+        assertThat(result.get().getAmount()).isEqualByComparingTo("20.00");
     }
 
     @Test
@@ -183,6 +183,6 @@ class PriceJpaRepositoryTest {
         assertThat(result).isPresent();
         assertThat(result.get().getPriority()).isEqualTo(1);
         assertThat(result.get().getPriceList()).isIn(1, 2);
-        assertThat(result.get().getPrice()).isIn(new BigDecimal("35.50"), new BigDecimal("25.45"));
+        assertThat(result.get().getAmount()).isIn(new BigDecimal("35.50"), new BigDecimal("25.45"));
     }
 }

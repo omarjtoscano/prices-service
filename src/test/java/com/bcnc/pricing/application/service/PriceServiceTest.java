@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.bcnc.pricing.domain.model.Price;
+import com.bcnc.pricing.domain.model.PriceNotFoundException;
 import com.bcnc.pricing.domain.model.PriceQuery;
 import com.bcnc.pricing.domain.port.out.PriceRepositoryPort;
 
@@ -53,26 +55,27 @@ class PriceServiceTest {
     @Test
     @DisplayName("Should return price when repository finds an applicable price")
     void shouldReturnPrice_whenRepositoryFindsApplicablePrice() {
-        when(priceRepositoryPort.findApplicablePrice(1L, 35455L, query.getApplicationDate()))
+        when(priceRepositoryPort.findApplicablePrice(query))
                 .thenReturn(Optional.of(expectedPrice));
 
-        Optional<Price> result = priceService.findApplicablePrice (query);
+        Price result = priceService.findApplicablePrice(query);
 
-        assertThat(result).isPresent();
-        assertThat(result.get().getPriceList()).isEqualTo(1);
-        assertThat(result.get().getAmount()).isEqualByComparingTo("35.50");
-        verify(priceRepositoryPort).findApplicablePrice(1L, 35455L, query.getApplicationDate());
+        assertThat(result.getPriceList()).isEqualTo(1);
+        assertThat(result.getAmount()).isEqualByComparingTo("35.50");
+        verify(priceRepositoryPort).findApplicablePrice(query);
     }
 
     @Test
-    @DisplayName("Should return empty when no applicable price exists")
-    void shouldReturnEmpty_whenNoApplicablePriceExists() {
-        when(priceRepositoryPort.findApplicablePrice(1L, 35455L, query.getApplicationDate()))
+    @DisplayName("Should throw PriceNotFoundException when no applicable price exists")
+    void shouldThrowPriceNotFoundException_whenNoApplicablePriceExists() {
+        when(priceRepositoryPort.findApplicablePrice(query))
                 .thenReturn(Optional.empty());
 
-        Optional<Price> result = priceService.findApplicablePrice (query);
+        assertThatThrownBy(() -> priceService.findApplicablePrice(query))
+                .isInstanceOf(PriceNotFoundException.class)
+                .hasMessageContaining("brandId=1")
+                .hasMessageContaining("productId=35455");
 
-        assertThat(result).isEmpty();
-        verify(priceRepositoryPort).findApplicablePrice(1L, 35455L, query.getApplicationDate());
+        verify(priceRepositoryPort).findApplicablePrice(query);
     }
 }

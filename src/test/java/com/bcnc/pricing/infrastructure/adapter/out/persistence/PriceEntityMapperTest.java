@@ -33,8 +33,8 @@ class PriceEntityMapperTest {
     }
 
     @Test
-    @DisplayName("Should correctly map renamed fields: entity.price -> domain.amount, entity.curr -> domain.currency")
-    void shouldMapRenamedFields_correctly() {
+    @DisplayName("Should correctly map amount and currency fields")
+    void shouldMapAmountAndCurrencyFields() {
         PriceEntity entity = new PriceEntity(
                 1L, 1L,
                 LocalDateTime.of(2020, 1, 1, 0, 0),

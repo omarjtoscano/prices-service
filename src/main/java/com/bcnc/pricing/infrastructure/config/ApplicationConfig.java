@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import com.bcnc.pricing.application.service.PriceService;
 import com.bcnc.pricing.domain.port.in.GetApplicablePriceUseCase;
 import com.bcnc.pricing.domain.port.out.PriceRepositoryPort;
-import com.bcnc.pricing.infrastructure.adapter.in.rest.MdcRequestFilter;
 import com.bcnc.pricing.infrastructure.adapter.out.persistence.PriceJpaRepository;
 import com.bcnc.pricing.infrastructure.adapter.out.persistence.PricePersistenceAdapter;
 
@@ -21,10 +20,5 @@ public class ApplicationConfig {
     @Bean
     GetApplicablePriceUseCase getApplicablePriceUseCase(PriceRepositoryPort priceRepositoryPort) {
         return new PriceService(priceRepositoryPort);
-    }
-
-    @Bean
-    MdcRequestFilter mdcRequestFilter() {
-        return new MdcRequestFilter();
     }
 }
